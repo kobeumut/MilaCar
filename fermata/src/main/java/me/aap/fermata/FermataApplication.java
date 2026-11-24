@@ -124,7 +124,8 @@ public class FermataApplication extends NetSplitCompatApp {
 	@Nullable
 	@Override
 	public String getCrashReportEmail() {
-		return "andrey.a.pavlenko@gmail.com";
+		// MilaCar crashes must not be reported to the Fermata author
+		return null;
 	}
 
 	public boolean isMirroringMode() {

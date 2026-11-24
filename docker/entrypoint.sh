@@ -26,7 +26,7 @@ create_local_props() {
   echo "storePassword=$PASSWORD" >> "$1"
 }
 
-[ -d "$FERMATA_PROJ_DIR" ] || git clone --recurse-submodules https://github.com/AndreyPavlenko/Fermata.git "$FERMATA_PROJ_DIR"
+[ -d "$FERMATA_PROJ_DIR" ] || git clone https://github.com/kobeumut/MilaCar.git "$FERMATA_PROJ_DIR"
 cd "$FERMATA_PROJ_DIR"
 
 while [ ! -f local.properties ]; do

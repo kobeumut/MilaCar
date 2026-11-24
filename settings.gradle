@@ -24,15 +24,18 @@ if ((gradle.ext.localProps['storeFile'] == null ||
 }
 
 
-rootProject.name = 'Fermata Music Player'
+rootProject.name = 'MilaCar'
 include ':fermata'
 include ':utils'
 project(':utils').projectDir = file('depends/utils')
 
+// MilaCar leaves out the addons, that are not needed in the car or send data to third parties.
+// Override with -PEXCLUDE_MODULES=<list> or excludeModules=<list> in local.properties,
+// use 'none' to build all the modules.
 def excludeModules = gradle.startParameter.projectProperties.get('EXCLUDE_MODULES')
-        ?: gradle.ext.localProps['excludeModules']
-gradle.ext.excludeModules = (excludeModules != null) ?
-        excludeModules.split(",").collect { ':' + it.trim() } : []
+        ?: gradle.ext.localProps['excludeModules'] ?: 'whisper,mlkit,chat,cast,poi,opusmt'
+gradle.ext.excludeModules = ('none' == excludeModules) ? [] :
+        excludeModules.split(",").collect { ':' + it.trim() }
 
 file('modules').eachDir {
     def name = ':' + it.name

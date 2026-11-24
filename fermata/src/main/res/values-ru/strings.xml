@@ -358,17 +358,10 @@
     <string name="open_log">Открыть лог файл</string>
     <string name="unlock_phone_and_grant">Разблокируйте телефон и предоставьте запрошенные разрешения.</string>
     <string name="screen_capture_rejected">Запрос на трянсляцию экрана отклонен.</string>
-    <string name="accessibility_dsc">Эта служба используется Fermata Mirror для взаимодействия с экраном телефона.</string>
+    <string name="accessibility_dsc">Эта служба используется MilaCar Mirror для взаимодействия с экраном телефона.</string>
     <string name="media_projection_action_text">Начать</string>
 
     <string name="about">О приложении</string>
-    <string name="about_html"><![CDATA[<H1 align="center">Fermata Media Player</H1>
-        <p>Fermata Media Player - это бесплатный, с открытым исходным кодом, аудио и видео плеер
-        с простым и интуитивным интерфейсом.</p>
-        <p><b>Автор:</b> Андрей Павленко</p>
-        <p><b>Версия:</b> %1$s (%2$d)</p>
-        <p><b>Домашняя страница:</b> <a href="%3$s">%3$s</a></p>
-        ]]></string>
 
     <string name="err_failed_to_play">Не удалось воспроизвести %s</string>
     <string name="err_failed_to_play_cause">Не удалось воспроизвести %1$s: %2$s</string>
