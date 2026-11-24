@@ -328,10 +328,7 @@ public class MainActivityDelegate extends ActivityDelegate
 	}
 
 	private void defaultIntent() {
-		if (getActiveFragment() != null) {
-			checkUpdates();
-			return;
-		}
+		if (getActiveFragment() != null) return;
 
 		String showAddon = getPrefs().getShowAddonOnStartPref();
 		if (showAddon != null) {
@@ -339,7 +336,6 @@ public class MainActivityDelegate extends ActivityDelegate
 
 			if (addon instanceof FermataFragmentAddon) {
 				showFragment(((FermataFragmentAddon) addon).getFragmentId());
-				checkUpdates();
 				return;
 			}
 		}
@@ -349,20 +345,12 @@ public class MainActivityDelegate extends ActivityDelegate
 				Log.e(fail1, "Last played track not found");
 			}
 			if ((ok == null) || !ok) showFragment(R.id.folders_fragment);
-			checkUpdates();
 		});
 
 		if (!f.isDone() || f.isFailed() || !Boolean.TRUE.equals(f.peek())) {
 			showFragment(R.id.folders_fragment);
 			setContentLoading(f);
 		}
-	}
-
-	private void checkUpdates() {
-		if (!AUTO) return;
-		if (getAppActivity() instanceof MainActivity a) a.uninstallControl().thenRun(() -> {
-			if (getPrefs().getCheckUpdatesPref()) a.checkUpdates();
-		});
 	}
 
 	@Override
@@ -476,6 +464,7 @@ public class MainActivityDelegate extends ActivityDelegate
 			case MainActivityPrefs.THEME_STAR_WARS -> R.style.AppTheme_BlackStarWars;
 			case MainActivityPrefs.THEME_PURPLE -> R.style.AppTheme_Purple;
 			case MainActivityPrefs.THEME_CLASSIC -> R.style.AppTheme_Classic;
+			case MainActivityPrefs.THEME_CAR -> R.style.AppTheme_Car;
 			default -> R.style.AppTheme_Dark;
 		};
 		ctx.setTheme(theme);

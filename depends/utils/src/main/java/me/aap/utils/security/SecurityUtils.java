@@ -34,6 +34,7 @@ import java.util.Date;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -311,6 +312,10 @@ public class SecurityUtils {
 		try {
 			SSLEngine eng = ClientContextHolder.context.createSSLEngine(peerHost, peerPort);
 			eng.setUseClientMode(true);
+			// Verify that the server certificate matches the requested host name
+			SSLParameters params = eng.getSSLParameters();
+			params.setEndpointIdentificationAlgorithm("HTTPS");
+			eng.setSSLParameters(params);
 			return eng;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -335,7 +340,8 @@ public class SecurityUtils {
 
 			try {
 				ctx = SSLContext.getInstance("TLS");
-				ctx.init(null, new TrustManager[]{InsecureTrustManager.instance}, null);
+				// Use the system trust store - server certificates must be valid
+				ctx.init(null, null, null);
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}

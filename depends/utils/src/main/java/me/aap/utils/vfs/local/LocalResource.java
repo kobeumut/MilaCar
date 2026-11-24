@@ -98,15 +98,20 @@ abstract class LocalResource implements VirtualResource {
 		if (isFile()) {
 			getVirtualFileSystem().closeCachedChannels(file);
 			if (file.delete()) return completed(true);
-			return OsUtils.su(15000, "rm '", file.getAbsolutePath(), "'").map(r -> r == 0);
+			return OsUtils.su(15000, "rm ", shellQuote(file.getAbsolutePath())).map(r -> r == 0);
 		}
 
 		try {
 			FileUtils.delete(file);
 			return completed(true);
 		} catch (Throwable ex) {
-			return OsUtils.su(30000, "rm -rf '", file.getAbsolutePath(), "'").map(r -> r == 0);
+			return OsUtils.su(30000, "rm -rf ", shellQuote(file.getAbsolutePath())).map(r -> r == 0);
 		}
+	}
+
+	// Quote the path for the shell, so that a file name could not inject commands
+	private static String shellQuote(String path) {
+		return "'" + path.replace("'", "'\\''") + "'";
 	}
 
 	@Override

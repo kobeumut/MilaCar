@@ -257,32 +257,47 @@ public class FermataChromeClient extends WebChromeClient {
 	public void onPermissionRequest(PermissionRequest request) {
 		Log.d("Permissions requested: ", Arrays.toString(request.getResources()));
 		Map<String, String> perms = new HashMap<>();
-		String[] resources = request.getResources();
+		// Protected media (DRM) does not require a runtime permission. Grant it alone - never
+		// grant the microphone together with it.
+		List<String> noPerm = new ArrayList<>(1);
 
-		for (String p : resources) {
+		for (String p : request.getResources()) {
 			switch (p) {
 				case PermissionRequest.RESOURCE_AUDIO_CAPTURE ->
 						perms.put(Manifest.permission.RECORD_AUDIO, p);
-				case PermissionRequest.RESOURCE_VIDEO_CAPTURE -> perms.put(Manifest.permission.CAMERA, p);
-				case PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> {
-					request.grant(resources);
-					return;
-				}
+				case PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> noPerm.add(p);
+				// Camera is never granted to web pages
 			}
 		}
 
 		if (perms.isEmpty()) {
-			Log.d("No permissions granted");
-			request.deny();
+			if (noPerm.isEmpty()) {
+				Log.d("No permissions granted");
+				request.deny();
+			} else {
+				Log.d("Granted permissions: ", noPerm);
+				request.grant(noPerm.toArray(new String[0]));
+			}
 			return;
 		}
 
 		MainActivityDelegate a = MainActivityDelegate.get(getWebView().getContext());
 
 		if (BuildConfig.AUTO && a.isCarActivityNotMirror()) {
-			// Activity.checkPermissions() is not supported by AA
-			Log.d("Granted permissions: ", perms.values());
-			request.grant(perms.values().toArray(new String[0]));
+			// Activity.checkPermissions() is not supported by AA - grant only the permissions,
+			// that the user has already granted to the application on the phone
+			Context ctx = getWebView().getContext();
+			List<String> granted = new ArrayList<>(noPerm);
+			for (var e : perms.entrySet()) {
+				if (ctx.checkSelfPermission(e.getKey()) == PERMISSION_GRANTED) granted.add(e.getValue());
+			}
+			if (granted.isEmpty()) {
+				Log.d("No permissions granted");
+				request.deny();
+			} else {
+				Log.d("Granted permissions: ", granted);
+				request.grant(granted.toArray(new String[0]));
+			}
 			return;
 		}
 
@@ -293,7 +308,7 @@ public class FermataChromeClient extends WebChromeClient {
 				Log.e(err, "Permission request failed");
 				request.deny();
 			} else {
-				List<String> granted = new ArrayList<>(r.length);
+				List<String> granted = new ArrayList<>(noPerm);
 
 				for (int i = 0; i < r.length; i++) {
 					if (r[i] == PERMISSION_GRANTED) granted.add(perms.get(keys[i]));

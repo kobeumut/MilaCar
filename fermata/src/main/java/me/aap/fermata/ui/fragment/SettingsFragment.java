@@ -686,11 +686,6 @@ public class SettingsFragment extends MainActivityFragment
 			});
 		}
 		if (BuildConfig.AUTO) {
-			sub1.addBooleanPref(o -> {
-				o.store = a.getPrefs();
-				o.pref = MainActivityPrefs.CHECK_UPDATES;
-				o.title = R.string.check_updates;
-			});
 			if (!a.isCarActivityNotMirror()) {
 				sub1.addButton(o -> {
 					o.title = R.string.open_log;
@@ -732,7 +727,7 @@ public class SettingsFragment extends MainActivityFragment
 			o.formatSubtitle = true;
 			o.values = new int[]{R.string.theme_dark, R.string.theme_light, R.string.theme_system,
 					R.string.theme_black, R.string.theme_star_wars, R.string.theme_purple,
-					R.string.theme_classic};
+					R.string.theme_classic, R.string.theme_car};
 		});
 		ps.addBooleanPref(o -> {
 			o.store = a.getPrefs();

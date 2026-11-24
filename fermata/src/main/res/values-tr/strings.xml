@@ -49,6 +49,7 @@
     <string name="theme_star_wars">Yıldız Savaşları</string>
     <string name="theme_purple">Mor</string>
     <string name="theme_classic">Klasik</string>
+    <string name="theme_car">Araç (yüksek kontrast)</string>
 
     <string name="nav_bar_pos">Gezinme çubuğu konumu</string>
     <string name="nav_bar_pos_sub">Mevcut konum: %1$s</string>

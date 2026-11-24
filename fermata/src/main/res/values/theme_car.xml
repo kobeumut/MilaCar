@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+    High contrast theme for in-car use: pure black background (no glare at night,
+    power saving on OLED head units), white text and a single amber accent, which stays
+    readable in direct sunlight and is easy to spot at a glance.
+    -->
+    <style name="AppTheme.Car">
+
+        <item name="android:colorBackground">#000000</item>
+        <item name="android:editTextColor">#FFFFFF</item>
+
+        <!-- Status bar-->
+        <item name="colorPrimaryDark">#000000</item>
+
+        <!-- Tool/Nav bars -->
+        <item name="colorPrimary">#0D0D0D</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+
+        <!-- List/Media items -->
+        <item name="colorSecondary">#141414</item>
+        <item name="colorOnSecondary">#FFB300</item>
+        <item name="android:textColorSecondary">#F5F5F5</item>
+        <item name="boxStrokeColor">#5C5C5C</item>
+
+        <!-- Active media item -->
+        <item name="alpha">1</item>
+        <item name="colorSecondaryVariant">#4D3600</item>
+        <item name="android:textColorTertiary">#FFFFFF</item>
+
+        <!-- Popup menu -->
+        <item name="colorSurface">#1E1E1E</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorPrimarySurface">#000000</item>
+        <item name="colorOnPrimarySurface">#FFFFFF</item>
+
+        <item name="colorAccent">#FFB300</item>
+        <item name="rippleColor">#80FFB300</item>
+
+        <item name="android:textColorHint">#9E9E9E</item>
+
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="colorControlActivated">#FFB300</item>
+
+        <item name="cornerRadius">10dp</item>
+        <item name="appControlPanelStyle">@style/AppTheme.Car.ControlPanelStyle</item>
+        <item name="appSeekBarStyle">@style/AppTheme.Car.SeekBarStyle</item>
+        <item name="appStreamProgressStyle">@style/AppTheme.Car.StreamProgressStyle</item>
+
+    </style>
+
+    <!-- Bigger playback buttons - easier to hit on a moving car's touch screen -->
+    <style name="AppTheme.Car.ControlPanelStyle" parent="AppTheme.ControlPanelStyle">
+        <item name="size">84dp</item>
+    </style>
+
+    <style name="AppTheme.Car.SeekBarStyle" parent="AppTheme.SeekBarStyle">
+        <item name="android:thumbTint">#FFB300</item>
+        <item name="android:progressTint">#FFB300</item>
+        <item name="android:secondaryProgressTint">#5C5C5C</item>
+    </style>
+
+    <style name="AppTheme.Car.StreamProgressStyle" parent="AppTheme.StreamProgressStyle">
+        <item name="indicatorColor">#FFB300</item>
+        <item name="trackColor">#2A2A2A</item>
+    </style>
+
+</resources>

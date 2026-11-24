@@ -31,6 +31,7 @@ public interface MainActivityPrefs
 	int THEME_STAR_WARS = 4;
 	int THEME_PURPLE = 5;
 	int THEME_CLASSIC = 6;
+	int THEME_CAR = 7;
 	int CLOCK_POS_NONE = 0;
 	int CLOCK_POS_LEFT = 1;
 	int CLOCK_POS_RIGHT = 2;
@@ -52,8 +53,6 @@ public interface MainActivityPrefs
 	Pref<DoubleSupplier> P_SPLIT_PERCENT_SUB = Pref.f("P_SPLIT_PERCENT_SUB", 0.5f);
 	Pref<DoubleSupplier> L_SPLIT_PERCENT_SUB = Pref.f("L_SPLIT_PERCENT_SUB", 0.5f);
 	Pref<Supplier<String>> SHOW_ADDON_ON_START = Pref.s("SHOW_ADDON_ON_START", (String) null);
-	Pref<BooleanSupplier> CHECK_UPDATES = Pref.b("CHECK_UPDATES", true);
-	Pref<LongSupplier> CHECK_UPDATES_STAMP = Pref.l("CHECK_UPDATES_STAMP", 0);
 	Pref<BooleanSupplier> SYS_BARS_ON_VIDEO_TOUCH = Pref.b("SYS_BARS_ON_VIDEO_TOUCH", false);
 	Pref<BooleanSupplier> LANDSCAPE_VIDEO = Pref.b("LANDSCAPE_VIDEO", false);
 	Pref<BooleanSupplier> CHANGE_BRIGHTNESS = Pref.b("CHANGE_BRIGHTNESS", false);
@@ -67,7 +66,7 @@ public interface MainActivityPrefs
 	Pref<IntSupplier> LOCALE =
 			Pref.i("LOCALE", () -> Lang.get(Locale.getDefault().getLanguage()).ordinal());
 
-	Pref<IntSupplier> THEME_AA = Pref.i("THEME_AA", THEME_DARK);
+	Pref<IntSupplier> THEME_AA = Pref.i("THEME_AA", THEME_CAR);
 	Pref<BooleanSupplier> HIDE_BARS_AA = AUTO ? Pref.b("HIDE_BARS_AA", false) : null;
 	Pref<BooleanSupplier> FULLSCREEN_AA = AUTO ? Pref.b("FULLSCREEN_AA", false) : null;
 	Pref<BooleanSupplier> SHOW_PG_UP_DOWN_AA = AUTO ? Pref.b("SHOW_PG_UP_DOWN_AA", true) : null;
@@ -99,15 +98,6 @@ public interface MainActivityPrefs
 
 	default void setShowAddonOnStartPref(@Nullable String className) {
 		applyStringPref(SHOW_ADDON_ON_START, className);
-	}
-
-	default boolean getCheckUpdatesPref() {
-		if (!getBooleanPref(CHECK_UPDATES)) return false;
-		var now = System.currentTimeMillis();
-		var stamp = getLongPref(CHECK_UPDATES_STAMP);
-		if ((now - stamp) < (24L * 3600000L)) return false;
-		applyLongPref(CHECK_UPDATES_STAMP, now);
-		return true;
 	}
 
 	static boolean hasFullscreenPref(MainActivityDelegate a, List<Pref<?>> prefs) {

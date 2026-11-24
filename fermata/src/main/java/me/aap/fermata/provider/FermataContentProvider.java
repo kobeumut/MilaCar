@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import me.aap.fermata.BuildConfig;
 import me.aap.fermata.FermataApplication;
@@ -86,7 +87,9 @@ public class FermataContentProvider extends ContentProvider {
 
 			switch (s) {
 				case "file" -> {
-					return ParcelFileDescriptor.open(new File(u.toString().substring(6)), MODE_READ_ONLY);
+					File f = new File(u.toString().substring(6));
+					if (!isReadableImageFile(f)) throw new FileNotFoundException(uri.toString());
+					return ParcelFileDescriptor.open(f, MODE_READ_ONLY);
 				}
 				case "http", "https" -> {
 					try {
@@ -108,6 +111,36 @@ public class FermataContentProvider extends ContentProvider {
 		}
 
 		throw new FileNotFoundException(uri.toString());
+	}
+
+	/**
+	 * The provider is exported, so that Android Auto and the launchers could load the artwork.
+	 * Only allow images and the cached artwork, never the application's private files
+	 * (preferences, databases), which may contain credentials.
+	 */
+	private boolean isReadableImageFile(File f) {
+		var ctx = getContext();
+		if (ctx == null) return false;
+
+		try {
+			String path = f.getCanonicalPath();
+			if (isInDir(path, ctx.getCacheDir()) || isInDir(path, ctx.getExternalCacheDir()))
+				return true;
+			if (isInDir(path, new File(ctx.getApplicationInfo().dataDir)) ||
+					isInDir(path, ctx.getDataDir()))
+				return false;
+			String mime = FileUtils.getMimeType(path);
+			return (mime != null) && mime.startsWith("image/");
+		} catch (Exception ex) {
+			Log.e(ex, "Failed to check file: ", f);
+			return false;
+		}
+	}
+
+	private static boolean isInDir(String path, @Nullable File dir) throws IOException {
+		if (dir == null) return false;
+		String d = dir.getCanonicalPath();
+		return path.equals(d) || path.startsWith(d + File.separatorChar);
 	}
 
 	@Override

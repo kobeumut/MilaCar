@@ -29,9 +29,15 @@ include ':fermata'
 include ':utils'
 project(':utils').projectDir = file('depends/utils')
 
+def excludeModules = gradle.startParameter.projectProperties.get('EXCLUDE_MODULES')
+        ?: gradle.ext.localProps['excludeModules']
+gradle.ext.excludeModules = (excludeModules != null) ?
+        excludeModules.split(",").collect { ':' + it.trim() } : []
+
 file('modules').eachDir {
     def name = ':' + it.name
     if ((':gdrive' == name) && !gradle.ext.enableGoogleServices) return
+    if (gradle.ext.excludeModules.contains(name)) return
     gradle.ext.modules.add(name)
     include name
     project(name).projectDir = it
