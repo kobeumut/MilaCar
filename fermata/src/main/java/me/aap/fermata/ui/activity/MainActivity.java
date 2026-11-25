@@ -164,12 +164,26 @@ public class MainActivity extends SplitCompatActivityBase
 	}
 
 	/**
+	 * Since Android 14 Android Auto ignores the installer recorded by the package installer, the full
+	 * UI is shown only with root (LSPosed) or with an adapter in the developer mode.
+	 */
+	public static boolean isInstallerWorkaroundSupported() {
+		return SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
+	}
+
+	/**
 	 * Reinstall the installed APK of this application with Google Play as the installer, so that
 	 * the full UI appears in Android Auto. Nothing is downloaded - the APK already installed on
 	 * the device is passed to the system package installer, which asks the user to confirm.
 	 */
 	public void installForAndroidAuto() {
 		if (!BuildConfig.AUTO) return;
+
+		if (!isInstallerWorkaroundSupported()) {
+			showAlert(this, R.string.aa_install_a14);
+			return;
+		}
+
 		var info = getApplicationInfo();
 
 		if ((info.splitSourceDirs != null) && (info.splitSourceDirs.length != 0)) {

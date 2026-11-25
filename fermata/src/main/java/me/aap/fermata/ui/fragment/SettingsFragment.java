@@ -709,8 +709,9 @@ public class SettingsFragment extends MainActivityFragment
 			if (!a.isCarActivityNotMirror() && (a.getAppActivity() instanceof MainActivity m)) {
 				ps.addButton(o -> {
 					o.title = R.string.aa_install;
-					o.subtitle = MainActivity.isInstalledForAndroidAuto(m) ? R.string.aa_install_done :
-							R.string.aa_install_sub;
+					o.subtitle = !MainActivity.isInstallerWorkaroundSupported() ? R.string.aa_install_a14_sub :
+							MainActivity.isInstalledForAndroidAuto(m) ? R.string.aa_install_done :
+									R.string.aa_install_sub;
 					o.onClick = m::installForAndroidAuto;
 				});
 			}

@@ -13,7 +13,7 @@ media files organized in folders and playlists – from the phone storage or fro
 
 |                    |                                                                 |
 |--------------------|-----------------------------------------------------------------|
-| Version            | 3.0.1 (based on Fermata 2.0.2, upstream commit `45c12a2`)       |
+| Version            | 3.0.2 (based on Fermata 2.0.2, upstream commit `45c12a2`)       |
 | Application ID     | `com.kobeumut.milacar.auto` (can be installed next to Fermata) |
 | Minimum Android    | 9 (API 28)                                                      |
 | User guide (Turkish) | [docs/ARAC_KULLANIM_KILAVUZU.md](docs/ARAC_KULLANIM_KILAVUZU.md) |
@@ -88,13 +88,19 @@ See the [Turkish user guide](docs/ARAC_KULLANIM_KILAVUZU.md) for details. In sho
 2. In the Android Auto settings, tap **Version** 10 times to enable the developer mode.
 3. Open **⋮ → Developer settings** and enable **Unknown sources**. This is enough for
    **MilaCar Media Service**, the standard Android Auto media screen.
-4. To get the **full MilaCar UI** (YouTube, browser, video, folders) in the car, accept the
-   *"Show the full app in Android Auto"* prompt on the first start, or use
-   *Settings → Interface → Android Auto → Show the full app in Android Auto*. Android Auto lists
-   full screen apps only when Google Play is recorded as their installer, so MilaCar passes its
-   own installed APK to the system package installer with Google Play as the installer. Nothing
-   is downloaded. If the device's installer ignores it (some OEM skins), install once with
-   `adb install -r -i com.android.vending milacar-<version>-arm64.apk`.
+4. To get the **full MilaCar UI** (YouTube, browser, video) in the car: Android Auto lists full
+   screen apps only when they come from Google Play.
+   * **Android 13 and older:** accept the *"Show the full app in Android Auto"* prompt on the
+     first start, or use *Settings → Interface → Android Auto*. MilaCar passes its own installed
+     APK to the system package installer with Google Play as the installer. Nothing is
+     downloaded. If the device's installer ignores it, install once with
+     `adb install -r -i com.android.vending milacar-<version>-arm64.apk`.
+   * **Android 14 and newer:** installer tricks no longer work (see
+     [Fermata discussion #432](https://github.com/AndreyPavlenko/Fermata/discussions/432)). You
+     need either root with the LSPosed module (enable MilaCar in LSPosed) or a wireless adapter
+     in the developer mode, such as [AAWireless](https://www.aawireless.io/) or
+     [aa-proxy-rs](https://github.com/aa-proxy/aa-proxy-rs). Without them, use
+     MilaCar Media Service.
 5. Reconnect the phone to the car. **MilaCar** shows up in the Android Auto launcher.
 
 ## Building

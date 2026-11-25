@@ -335,8 +335,12 @@ public class MainActivityDelegate extends ActivityDelegate
 		var asked = PreferenceStore.Pref.b("AA_INSTALL_ASKED", false);
 		if (getPrefs().getBooleanPref(asked)) return;
 		getPrefs().applyBooleanPref(asked, true);
-		UiUtils.showQuestion(a, R.string.aa_install, R.string.aa_install_sub, ID_NULL)
-				.onSuccess(v -> a.installForAndroidAuto());
+		if (MainActivity.isInstallerWorkaroundSupported()) {
+			UiUtils.showQuestion(a, R.string.aa_install, R.string.aa_install_sub, ID_NULL)
+					.onSuccess(v -> a.installForAndroidAuto());
+		} else {
+			showAlert(a, R.string.aa_install_a14);
+		}
 	}
 
 	private void defaultIntent() {
