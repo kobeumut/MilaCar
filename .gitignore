@@ -16,3 +16,6 @@ res/*.jks
 # Custom builds
 fermata/src/custom/
 build-custom.gradle
+
+# macOS
+.DS_Store
