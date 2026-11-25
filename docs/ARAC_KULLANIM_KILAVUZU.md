@@ -4,9 +4,9 @@ MilaCar, açık kaynaklı [Fermata Media Player](https://github.com/AndreyPavlen
 
 | | |
 |---|---|
-| Dosya | `milacar-3.0.2-arm64.apk` |
+| Dosya | `milacar-3.0.3-arm64.apk` |
 | Paket adı | `com.kobeumut.milacar.auto` (Fermata ile yan yana kurulabilir) |
-| Sürüm | 3.0.2 (Fermata 2.0.2 / `45c12a2` tabanlı) |
+| Sürüm | 3.0.3 (Fermata 2.0.2 / `45c12a2` tabanlı) |
 | Mimari | arm64-v8a (2017'den sonra çıkmış neredeyse tüm Android telefonlar) |
 | En düşük Android sürümü | Android 9 |
 | İmza sertifikası SHA-256 | `a1f637cf58e1fe58b23ad785bc31cb52a2f62cd332287052eed4f3ed6b35c14d` |
@@ -35,10 +35,14 @@ Android Auto, Play Store dışından kurulan uygulamaları varsayılan olarak gi
 3. Sağ üstteki **⋮ menüsü → Geliştirici ayarları** bölümüne girin.
 4. **Bilinmeyen kaynaklar** seçeneğini **açın**.
 5. **Tam arayüzü etkinleştirin.** "Bilinmeyen kaynaklar" yalnızca **MilaCar Media Service**'i (standart müzik ekranı: klasörler, favoriler, listeler) gösterir. YouTube, tarayıcı ve video içeren tam **MilaCar** uygulamasını Android Auto yalnızca Google Play'den kurulan uygulamalarda gösterir. Yapılacak şey telefonunuzun Android sürümüne bağlıdır (Ayarlar → Telefon hakkında → Android sürümü):
-   - **Android 13 ve altı:** MilaCar'ı telefonda açın ve **"Tam uygulamayı Android Auto'da göster"** sorusuna **Tamam** deyin. Soruyu kaçırdıysanız: **Ayarlar → Arayüz → Android Auto → Tam uygulamayı Android Auto'da göster**. Android'in kurulum ekranında **Güncelle/Yükle**'yi onaylayın. Uygulama aynı APK ile yeniden kurulur; internetten hiçbir şey indirilmez, ayarlarınız korunur. Bazı üreticilerin kurulum ekranları (ör. Xiaomi/MIUI) bunu yok sayarsa bilgisayardan bir kez şu komutla kurun: `adb install -r -i com.android.vending milacar-3.0.2-arm64.apk`
-   - **Android 14 ve üzeri:** Google bu yolu kapattı. Uygulamayı silip yeniden kurmak, KingInstaller, AAAD ya da `adb install -i` **işe yaramaz**. Tam arayüz için şunlardan biri gerekir:
-     - **Root + LSPosed:** Magisk'te Zygisk'i açın, LSPosed modülünü kurun, LSPosed'de **MilaCar**'ı etkinleştirip telefonu yeniden başlatın. MilaCar'ın içindeki Android Auto modülü devreye girer.
-     - **Geliştirici modunda kablosuz adaptör:** [AAWireless](https://www.aawireless.io/) (cihaz ayarlarında geliştirici modu açık) veya [aa-proxy-rs](https://github.com/aa-proxy/aa-proxy-rs) (MITM ve geliştirici modu açık). Adaptör telefona kendini geliştirici başlık ünitesi olarak tanıtır, bu yüzden Android Auto tüm uygulamaları gösterir.
+   - **Android 13 ve altı:** MilaCar'ı telefonda açın ve **"Tam uygulamayı Android Auto'da göster"** sorusuna **Tamam** deyin. Soruyu kaçırdıysanız: **Ayarlar → Arayüz → Android Auto → Tam uygulamayı Android Auto'da göster**. Android'in kurulum ekranında **Güncelle/Yükle**'yi onaylayın. Araçta yine görünmezse aşağıdaki KingInstaller yöntemini kullanın.
+   - **Android 14 ve üzeri (ve işe yaramazsa her sürümde):** MilaCar APK'sını [KingInstaller](https://github.com/fcaronte/KingInstaller/releases) ile kurun; mevcut kurulumu silmeye gerek yok. KingInstaller kurulumu sistemin Paket Yükleyicisi üzerinden "Play Store kurdu" kaydıyla yapar; Android Auto tam da bunu ister.
+     - **Samsung ve Pixel:** klasik yöntem yeterli.
+     - **Diğer telefonlar:** [Shizuku](https://shizuku.rikka.app)'yu çalıştırıp KingInstaller'da **Shizuku Trick**'i açın.
+     - **Xiaomi / POCO / Redmi (MIUI/HyperOS):** yalnızca root yöntemi çalışıyor.
+     - `adb install -i com.android.vending …` **işe yaramaz**: isteyen olarak `com.android.shell` kaydedilir ve Android Auto reddeder.
+   - **Root + LSPosed:** Magisk'te Zygisk'i açın, LSPosed modülünü kurun, LSPosed'de **MilaCar**'ı etkinleştirip telefonu yeniden başlatın.
+   - **Geliştirici modunda kablosuz adaptör:** [AAWireless](https://www.aawireless.io/) veya [aa-proxy-rs](https://github.com/aa-proxy/aa-proxy-rs). Adaptör telefona kendini geliştirici başlık ünitesi olarak tanıtır; telefon tarafında bir şey gerekmez.
    - Bunlar yoksa **MilaCar Media Service** ile müzik dinlemeye devam edebilirsiniz.
 6. Telefonu araçtan çıkarıp yeniden takın (ya da kablosuz bağlantıyı kesip yeniden bağlayın).
 7. Araç ekranındaki Android Auto uygulama listesinde **MilaCar** simgesi görünür. Görünmüyorsa: Android Auto ayarları → **Başlatıcıyı özelleştir** bölümünden MilaCar'ı listeye ekleyin.
@@ -81,7 +85,7 @@ Değiştirmek ya da ince ayar yapmak için: **Ayarlar → Android Auto** bölüm
 
 | Sorun | Çözüm |
 |---|---|
-| Yalnızca **MilaCar Media Service** görünüyor, YouTube ve diğer özellikler yok | Media Service standart müzik ekranıdır, YouTube/tarayıcı orada bulunmaz. Android 13 ve altında Bölüm 2, adım 5'i uygulayın. **Android 14 ve üzerinde** silip yeniden kurmak işe yaramaz; root + LSPosed ya da geliştirici modunda bir adaptör gerekir. |
+| Yalnızca **MilaCar Media Service** görünüyor, YouTube ve diğer özellikler yok | Media Service standart müzik ekranıdır, YouTube/tarayıcı orada bulunmaz. Bölüm 2, adım 5'i uygulayın. **Android 14 ve üzerinde** MilaCar'ı KingInstaller ile kurun (silip yeniden kurmak tek başına işe yaramaz). |
 | MilaCar araç ekranında görünmüyor | Bölüm 2'deki **Bilinmeyen kaynaklar** açık mı kontrol edin. Telefonu yeniden bağlayın. **Başlatıcıyı özelleştir** listesine bakın. |
 | Açılıyor ama boş ekran | MilaCar'ı önce telefonda bir kez açıp izinleri verin, sonra araçta yeniden açın. |
 | Klasörler boş | Telefonda MilaCar → Ayarlar → Uygulama izinleri bölümünde dosya/medya izni verin, klasörü yeniden ekleyin. |
@@ -94,7 +98,7 @@ Değiştirmek ya da ince ayar yapmak için: **Ayarlar → Android Auto** bölüm
 Bunların hiçbiri normal kullanım için gerekli değildir. Hepsi varsayılan olarak kapalıdır.
 
 - **MilaCar Mirror (ekran yansıtma):** Telefon ekranını araca yansıtır. Gerekenler: Android **Erişilebilirlik** ayarlarından MilaCar hizmetini açmak (dokunmaları telefona iletmek için) ve ilk açılışta ekran kaydı iznini onaylamak.
-- **Root / LSPosed:** Root izni verilirse yansıtma izni otomatik ayarlanır. LSPosed modülü etkinleştirilirse Android Auto'nun "Play Store'dan mı kuruldu" denetimi atlanır. Android 14 ve üzerinde, adaptör yoksa tam arayüz için tek yol budur. Bu modül etkinken Android Auto içinde **tüm** uygulamalar Play'den kurulmuş gibi görünür.
+- **Root / LSPosed:** Root izni verilirse yansıtma izni otomatik ayarlanır. LSPosed modülü etkinleştirilirse Android Auto'nun "Play Store'dan mı kuruldu" denetimi atlanır. KingInstaller'ın çalışmadığı telefonlarda (ör. Xiaomi) tam arayüz için güvenilir yol budur. Bu modül etkinken Android Auto içinde **tüm** uygulamalar Play'den kurulmuş gibi görünür.
 
 ## 6. Güvenlik incelemesi: ne bulundu, ne değişti
 
@@ -132,5 +136,5 @@ export JAVA_HOME=<JDK 21>          # JDK 17.0.7'nin javac'ı bu projede çöküy
 export ANDROID_SDK_ROOT=<Android SDK yolu> NO_GS=true
 # local.properties: storeFile, keyAlias, keyPassword, storePassword (kendi imza anahtarınız)
 ./gradlew fermata:packageAutoReleaseUniversalApk -PABI=arm64-v8a
-# çıktı: fermata/build/outputs/apk_from_bundle/autoRelease/milacar-3.0.2-auto-release-universal.apk
+# çıktı: fermata/build/outputs/apk_from_bundle/autoRelease/milacar-3.0.3-auto-release-universal.apk
 ```

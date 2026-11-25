@@ -59,9 +59,9 @@
     <string name="aa_install">Show the full app in Android Auto</string>
     <string name="aa_install_sub">Android Auto shows only the media service of apps that were not installed from Google Play. Tap to reinstall this app with Google Play as the installer, so that the full UI (YouTube, browser, video) appears in the car. Nothing is downloaded</string>
     <string name="aa_install_done">Done: the app is registered for Android Auto. Reconnect the phone to the car</string>
-    <string name="aa_install_split">The app was installed as split APKs. Install the universal APK with: adb install -r -i com.android.vending milacar.apk</string>
-    <string name="aa_install_a14_sub">Not possible on Android 14+ without root or an adapter. Tap for details</string>
-    <string name="aa_install_a14">Since Android 14, Android Auto shows on the car screen only the apps installed from Google Play, and reinstalling does not help. MilaCar Media Service (music and folders) works without anything else. For the full app with YouTube, browser and video you need one of:\n\n• Root (Magisk + Zygisk) with the LSPosed module: enable MilaCar in LSPosed and reboot.\n• A wireless adapter in the developer mode, e.g. AAWireless or aa-proxy-rs.</string>
+    <string name="aa_install_split">The app was installed as split APKs, which Android Auto never shows. Install the universal MilaCar APK with KingInstaller (github.com/fcaronte/KingInstaller)</string>
+    <string name="aa_install_a14_sub">On Android 14+ install MilaCar with KingInstaller. Tap for details</string>
+    <string name="aa_install_a14">Android Auto shows the full app only if the Play Store is recorded as its installer and the system Package Installer as the requester. On Android 14+ the app cannot do this for itself. MilaCar Media Service (music and folders) works without anything else. For the full app with YouTube, browser and video:\n\n• Install the MilaCar APK with KingInstaller (github.com/fcaronte/KingInstaller), no uninstall needed. Samsung and Pixel: the classic method. Other phones: enable the Shizuku trick. Xiaomi/POCO/Redmi: only the root trick works.\n• Or root (Magisk + Zygisk) with the LSPosed module: enable MilaCar in LSPosed and reboot.\n• Or a wireless adapter in the developer mode, e.g. AAWireless or aa-proxy-rs.</string>
     <string name="aa_install_failed">Failed to reinstall the app: %1$s</string>
 
     <string name="nav_bar_pos">Navigation bar position</string>

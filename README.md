@@ -13,7 +13,7 @@ media files organized in folders and playlists – from the phone storage or fro
 
 |                    |                                                                 |
 |--------------------|-----------------------------------------------------------------|
-| Version            | 3.0.2 (based on Fermata 2.0.2, upstream commit `45c12a2`)       |
+| Version            | 3.0.3 (based on Fermata 2.0.2, upstream commit `45c12a2`)       |
 | Application ID     | `com.kobeumut.milacar.auto` (can be installed next to Fermata) |
 | Minimum Android    | 9 (API 28)                                                      |
 | User guide (Turkish) | [docs/ARAC_KULLANIM_KILAVUZU.md](docs/ARAC_KULLANIM_KILAVUZU.md) |
@@ -93,13 +93,16 @@ See the [Turkish user guide](docs/ARAC_KULLANIM_KILAVUZU.md) for details. In sho
    * **Android 13 and older:** accept the *"Show the full app in Android Auto"* prompt on the
      first start, or use *Settings → Interface → Android Auto*. MilaCar passes its own installed
      APK to the system package installer with Google Play as the installer. Nothing is
-     downloaded. If the device's installer ignores it, install once with
-     `adb install -r -i com.android.vending milacar-<version>-arm64.apk`.
-   * **Android 14 and newer:** installer tricks no longer work (see
-     [Fermata discussion #432](https://github.com/AndreyPavlenko/Fermata/discussions/432)). You
-     need either root with the LSPosed module (enable MilaCar in LSPosed) or a wireless adapter
-     in the developer mode, such as [AAWireless](https://www.aawireless.io/) or
-     [aa-proxy-rs](https://github.com/aa-proxy/aa-proxy-rs). Without them, use
+     downloaded.
+   * **Android 14 and newer, or if the above does not help:** install the MilaCar APK with
+     [KingInstaller](https://github.com/fcaronte/KingInstaller), which goes through the stock
+     Package Installer with the Play Store recorded as the installer: the classic method on Samsung
+     and Pixel, the Shizuku trick on other phones, the root trick on Xiaomi/POCO/Redmi.
+     `adb install -i com.android.vending` does **not** work: Android Auto rejects apps requested
+     by `com.android.shell`.
+   * Alternatives: root with the LSPosed module (enable MilaCar in LSPosed), or a wireless
+     adapter in the developer mode, such as [AAWireless](https://www.aawireless.io/) or
+     [aa-proxy-rs](https://github.com/aa-proxy/aa-proxy-rs). Without any of them, use
      MilaCar Media Service.
 5. Reconnect the phone to the car. **MilaCar** shows up in the Android Auto launcher.
 
