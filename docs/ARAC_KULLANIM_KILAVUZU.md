@@ -4,9 +4,9 @@ MilaCar, açık kaynaklı [Fermata Media Player](https://github.com/AndreyPavlen
 
 | | |
 |---|---|
-| Dosya | `milacar-3.0.0-arm64.apk` |
+| Dosya | `milacar-3.0.1-arm64.apk` |
 | Paket adı | `com.kobeumut.milacar.auto` (Fermata ile yan yana kurulabilir) |
-| Sürüm | 3.0.0 (Fermata 2.0.2 / `45c12a2` tabanlı) |
+| Sürüm | 3.0.1 (Fermata 2.0.2 / `45c12a2` tabanlı) |
 | Mimari | arm64-v8a (2017'den sonra çıkmış neredeyse tüm Android telefonlar) |
 | En düşük Android sürümü | Android 9 |
 | İmza sertifikası SHA-256 | `a1f637cf58e1fe58b23ad785bc31cb52a2f62cd332287052eed4f3ed6b35c14d` |
@@ -34,8 +34,13 @@ Android Auto, Play Store dışından kurulan uygulamaları varsayılan olarak gi
 2. En alttaki **Sürüm** satırına art arda **10 kez** dokunun ve "Geliştirici ayarlarına izin ver" sorusunu onaylayın.
 3. Sağ üstteki **⋮ menüsü → Geliştirici ayarları** bölümüne girin.
 4. **Bilinmeyen kaynaklar** seçeneğini **açın**.
-5. Telefonu araçtan çıkarıp yeniden takın (ya da kablosuz bağlantıyı kesip yeniden bağlayın).
-6. Araç ekranındaki Android Auto uygulama listesinde **MilaCar** simgesi görünür. Görünmüyorsa: Android Auto ayarları → **Başlatıcıyı özelleştir** bölümünden MilaCar'ı listeye ekleyin.
+5. **Tam arayüzü etkinleştirin.** "Bilinmeyen kaynaklar" yalnızca **MilaCar Media Service**'i (standart müzik ekranı) gösterir. YouTube, tarayıcı, video ve klasör görünümünü içeren tam **MilaCar** uygulamasını Android Auto yalnızca Google Play'den kurulmuş görünen uygulamalarda listeler. Bunu sağlamak için:
+   - MilaCar'ı telefonda açın. İlk açılışta **"Tam uygulamayı Android Auto'da göster"** sorusu çıkar, **Tamam**'a basın. Soruyu kaçırdıysanız: **Ayarlar → Arayüz → Android Auto → Tam uygulamayı Android Auto'da göster**.
+   - Android'in kurulum ekranı açılır. **Güncelle / Yükle** ile onaylayın. İlk seferde "bu kaynaktan uygulama yüklemeye izin ver" sorulursa MilaCar için izin verip geri dönün.
+   - Uygulama aynı APK ile yeniden kurulur. İnternetten hiçbir şey indirilmez, ayarlarınız ve klasörleriniz korunur. Aynı ayar satırında artık "Tamam: uygulama Android Auto için kayıtlı" yazar.
+   - Bazı üreticilerin kurulum ekranları (ör. Xiaomi/MIUI) bu bilgiyi yok sayabilir. O durumda bilgisayardan bir kez şu komutla kurun (telefonda USB hata ayıklama açık olmalı): `adb install -r -i com.android.vending milacar-3.0.1-arm64.apk`
+6. Telefonu araçtan çıkarıp yeniden takın (ya da kablosuz bağlantıyı kesip yeniden bağlayın).
+7. Araç ekranındaki Android Auto uygulama listesinde **MilaCar** simgesi görünür. Görünmüyorsa: Android Auto ayarları → **Başlatıcıyı özelleştir** bölümünden MilaCar'ı listeye ekleyin.
 
 Araç ekranında üç simge görebilirsiniz:
 
@@ -75,6 +80,7 @@ Değiştirmek ya da ince ayar yapmak için: **Ayarlar → Android Auto** bölüm
 
 | Sorun | Çözüm |
 |---|---|
+| Yalnızca **MilaCar Media Service** görünüyor, YouTube ve diğer özellikler yok | Tam arayüz etkinleştirilmemiş. Bölüm 2, adım 5'i uygulayın, sonra telefonu yeniden bağlayın. Media Service standart müzik ekranıdır, YouTube/tarayıcı orada bulunmaz. |
 | MilaCar araç ekranında görünmüyor | Bölüm 2'deki **Bilinmeyen kaynaklar** açık mı kontrol edin. Telefonu yeniden bağlayın. **Başlatıcıyı özelleştir** listesine bakın. |
 | Açılıyor ama boş ekran | MilaCar'ı önce telefonda bir kez açıp izinleri verin, sonra araçta yeniden açın. |
 | Klasörler boş | Telefonda MilaCar → Ayarlar → Uygulama izinleri bölümünde dosya/medya izni verin, klasörü yeniden ekleyin. |
@@ -99,7 +105,7 @@ Bununla birlikte Fermata'da **kötü niyetli olmayan ama ciddi güvenlik açıkl
 |---|---|---|
 | 1 | Uygulamanın kendi HTTPS istemcisi **hiçbir sertifikayı doğrulamıyordu** (trust-all). Aynı Wi-Fi'daki biri bağlantıları dinleyip değiştirebilirdi. | **Düzeltildi:** sistem sertifika deposu ve alan adı (hostname) doğrulaması zorunlu. |
 | 2 | Dışa açık `ContentProvider`, telefondaki **herhangi bir uygulamanın** uygulamanın özel dosyalarını okumasına izin veriyordu. SMB/SFTP şifreleri de bu dosyalarda tutuluyor. | **Düzeltildi:** yalnızca resim dosyaları ve kapak görseli önbelleği okunabilir. Uygulama verileri erişime kapalı. |
-| 3 | Otomatik güncelleme, orijinal geliştiricinin GitHub'ından APK indirip kendini **Play Store'dan kurulmuş gibi** gösteriyordu (doğrulamasız bağlantı üzerinden). | **Kaldırıldı**, uygulama kurma/silme izinleri de birlikte kaldırıldı. |
+| 3 | Otomatik güncelleme, orijinal geliştiricinin GitHub'ından APK indirip kendini **Play Store'dan kurulmuş gibi** gösteriyordu (doğrulamasız bağlantı üzerinden). | **Kaldırıldı**, uygulama silme izni de kaldırıldı. Kurma izni yalnızca uygulamanın telefonda kurulu kendi APK'sını Android Auto için yeniden kurmakta kullanılıyor; internetten bir şey indirilmiyor. |
 | 4 | Varsayılan imza anahtarı herkesin bildiği bir paroladan üretiliyordu. | MilaCar APK'sı **size özel, rastgele üretilmiş** bir anahtarla imzalandı. |
 | 5 | Tarayıcı eklentisi, DRM isteyen herhangi bir web sitesine **mikrofon ve kamera** veriyordu. Araç modunda ise sormadan veriyordu. | **Düzeltildi:** kamera web sayfalarına hiç verilmiyor. Mikrofon yalnızca siz telefonda izin verdiyseniz veriliyor. Kamera izni APK'dan kaldırıldı. |
 | 6 | Root'lu cihazda dosya silme komutu, dosya adındaki `'` karakteriyle komut enjeksiyonuna açıktı. | **Düzeltildi:** dosya yolu kabuk için doğru biçimde tırnaklanıyor. |
@@ -125,5 +131,5 @@ export JAVA_HOME=<JDK 21>          # JDK 17.0.7'nin javac'ı bu projede çöküy
 export ANDROID_SDK_ROOT=<Android SDK yolu> NO_GS=true
 # local.properties: storeFile, keyAlias, keyPassword, storePassword (kendi imza anahtarınız)
 ./gradlew fermata:packageAutoReleaseUniversalApk -PABI=arm64-v8a
-# çıktı: fermata/build/outputs/apk_from_bundle/autoRelease/milacar-3.0.0-auto-release-universal.apk
+# çıktı: fermata/build/outputs/apk_from_bundle/autoRelease/milacar-3.0.1-auto-release-universal.apk
 ```

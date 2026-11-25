@@ -13,7 +13,7 @@ media files organized in folders and playlists – from the phone storage or fro
 
 |                    |                                                                 |
 |--------------------|-----------------------------------------------------------------|
-| Version            | 3.0.0 (based on Fermata 2.0.2, upstream commit `45c12a2`)       |
+| Version            | 3.0.1 (based on Fermata 2.0.2, upstream commit `45c12a2`)       |
 | Application ID     | `com.kobeumut.milacar.auto` (can be installed next to Fermata) |
 | Minimum Android    | 9 (API 28)                                                      |
 | User guide (Turkish) | [docs/ARAC_KULLANIM_KILAVUZU.md](docs/ARAC_KULLANIM_KILAVUZU.md) |
@@ -48,7 +48,7 @@ The review did find several non-malicious security issues. MilaCar fixes or remo
 |---|---|
 | The built-in HTTP client trusted **any** TLS certificate and did not verify host names, so anyone on the same network could intercept or modify HTTPS traffic. | Server certificates are validated against the system trust store and host names are verified. |
 | The exported `FermataContentProvider` let **any installed app** read any file the app can read, including its private preferences with the SMB/SFTP credentials. | Only images and the cached artwork can be read. Private app data is rejected. |
-| The self-updater downloaded the upstream APK over that unverified connection and installed it, posing as the Play Store. | Removed, together with the `REQUEST_INSTALL_PACKAGES` / `REQUEST_DELETE_PACKAGES` permissions and the companion app uninstall prompt. |
+| The self-updater downloaded the upstream APK over that unverified connection and installed it, posing as the Play Store. | Removed, together with `REQUEST_DELETE_PACKAGES` and the companion app uninstall prompt. `REQUEST_INSTALL_PACKAGES` is kept only to reinstall the app's own installed APK for Android Auto (see below) – nothing is downloaded. |
 | The browser addon granted **microphone and camera** to any page that requested DRM, and in the car granted them without asking. | Camera is never granted to web pages and the permission is removed. DRM is granted on its own. In the car the microphone is granted only if the user has already allowed it on the phone. |
 | The root `rm` fallback did not quote the path, so a crafted file name could inject shell commands. | The path is quoted for the shell. |
 | Preferences, including the network share credentials, were included in the Google cloud backup. | Cloud backup is disabled. Use *Settings → Export/Import preferences* to move settings. |
@@ -86,8 +86,16 @@ See the [Turkish user guide](docs/ARAC_KULLANIM_KILAVUZU.md) for details. In sho
 1. Install the APK on the phone, open MilaCar once, grant the permissions and add your music
    folder.
 2. In the Android Auto settings, tap **Version** 10 times to enable the developer mode.
-3. Open **⋮ → Developer settings** and enable **Unknown sources**.
-4. Reconnect the phone to the car. **MilaCar** shows up in the Android Auto launcher.
+3. Open **⋮ → Developer settings** and enable **Unknown sources**. This is enough for
+   **MilaCar Media Service**, the standard Android Auto media screen.
+4. To get the **full MilaCar UI** (YouTube, browser, video, folders) in the car, accept the
+   *"Show the full app in Android Auto"* prompt on the first start, or use
+   *Settings → Interface → Android Auto → Show the full app in Android Auto*. Android Auto lists
+   full screen apps only when Google Play is recorded as their installer, so MilaCar passes its
+   own installed APK to the system package installer with Google Play as the installer. Nothing
+   is downloaded. If the device's installer ignores it (some OEM skins), install once with
+   `adb install -r -i com.android.vending milacar-<version>-arm64.apk`.
+5. Reconnect the phone to the car. **MilaCar** shows up in the Android Auto launcher.
 
 ## Building
 

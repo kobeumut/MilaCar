@@ -68,6 +68,7 @@ import me.aap.fermata.media.pref.MediaLibPrefs;
 import me.aap.fermata.media.service.MediaSessionListener;
 import me.aap.fermata.media.pref.MediaPrefs;
 import me.aap.fermata.media.pref.PlaybackControlPrefs;
+import me.aap.fermata.ui.activity.MainActivity;
 import me.aap.fermata.ui.activity.MainActivityDelegate;
 import me.aap.fermata.ui.activity.MainActivityListener;
 import me.aap.fermata.ui.activity.MainActivityPrefs;
@@ -705,6 +706,14 @@ public class SettingsFragment extends MainActivityFragment
 
 	private void addAAInterface(MainActivityDelegate a, PreferenceSet ps) {
 		if (BuildConfig.AUTO) {
+			if (!a.isCarActivityNotMirror() && (a.getAppActivity() instanceof MainActivity m)) {
+				ps.addButton(o -> {
+					o.title = R.string.aa_install;
+					o.subtitle = MainActivity.isInstalledForAndroidAuto(m) ? R.string.aa_install_done :
+							R.string.aa_install_sub;
+					o.onClick = m::installForAndroidAuto;
+				});
+			}
 			addInterface(a, ps, MainActivityPrefs.THEME_AA, MainActivityPrefs.HIDE_BARS_AA,
 					MainActivityPrefs.FULLSCREEN_AA, MainActivityPrefs.SHOW_PG_UP_DOWN_AA,
 					MainActivityPrefs.USE_DPAD_CURSOR, MainActivityPrefs.NAV_BAR_POS_AA,

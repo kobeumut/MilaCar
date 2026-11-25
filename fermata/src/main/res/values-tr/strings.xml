@@ -50,6 +50,11 @@
     <string name="theme_purple">Mor</string>
     <string name="theme_classic">Klasik</string>
     <string name="theme_car">Araç (yüksek kontrast)</string>
+    <string name="aa_install">Tam uygulamayı Android Auto\'da göster</string>
+    <string name="aa_install_sub">Android Auto, Google Play dışından kurulan uygulamaların yalnızca medya servisini gösterir. Dokunun: uygulama, Google Play kurmuş gibi kaydedilerek yeniden kurulur ve araçta tam arayüz (YouTube, tarayıcı, video) görünür. İnternetten hiçbir şey indirilmez</string>
+    <string name="aa_install_done">Tamam: uygulama Android Auto için kayıtlı. Telefonu araca yeniden bağlayın</string>
+    <string name="aa_install_split">Uygulama bölünmüş APK olarak kurulmuş. Tek APK\'yı şu komutla kurun: adb install -r -i com.android.vending milacar.apk</string>
+    <string name="aa_install_failed">Uygulama yeniden kurulamadı: %1$s</string>
 
     <string name="nav_bar_pos">Gezinme çubuğu konumu</string>
     <string name="nav_bar_pos_sub">Mevcut konum: %1$s</string>

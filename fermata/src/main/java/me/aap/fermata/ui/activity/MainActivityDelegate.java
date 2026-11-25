@@ -327,7 +327,20 @@ public class MainActivityDelegate extends ActivityDelegate
 		return completed(false);
 	}
 
+	// Offer once to reinstall the app, so that the full UI is shown in Android Auto
+	private void checkAndroidAutoInstall() {
+		if (!AUTO || getAppActivity().isCarActivity()) return;
+		if (!(getAppActivity() instanceof MainActivity a) || MainActivity.isInstalledForAndroidAuto(a))
+			return;
+		var asked = PreferenceStore.Pref.b("AA_INSTALL_ASKED", false);
+		if (getPrefs().getBooleanPref(asked)) return;
+		getPrefs().applyBooleanPref(asked, true);
+		UiUtils.showQuestion(a, R.string.aa_install, R.string.aa_install_sub, ID_NULL)
+				.onSuccess(v -> a.installForAndroidAuto());
+	}
+
 	private void defaultIntent() {
+		checkAndroidAutoInstall();
 		if (getActiveFragment() != null) return;
 
 		String showAddon = getPrefs().getShowAddonOnStartPref();

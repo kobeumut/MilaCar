@@ -7,14 +7,7 @@ import static android.media.AudioManager.STREAM_MUSIC;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.view.InputDevice.SOURCE_CLASS_POINTER;
 import static android.view.MotionEvent.ACTION_SCROLL;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static me.aap.fermata.util.Utils.createDownloader;
 import static me.aap.utils.async.Completed.completed;
-import static me.aap.utils.async.Completed.completedNull;
-import static me.aap.utils.async.Completed.completedVoid;
-import static me.aap.utils.async.Completed.failed;
-import static me.aap.utils.misc.MiscUtils.isPackageInstalled;
 import static me.aap.utils.pref.PreferenceStore.Pref.sa;
 import static me.aap.utils.ui.UiUtils.showAlert;
 
@@ -24,23 +17,18 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.content.pm.PackageManager;
 import android.view.MotionEvent;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.FileProvider;
 
 import com.google.android.play.core.splitcompat.SplitCompat;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.aap.fermata.BuildConfig;
@@ -50,21 +38,16 @@ import me.aap.fermata.addon.AddonInfo;
 import me.aap.fermata.addon.AddonManager;
 import me.aap.fermata.media.service.FermataMediaServiceConnection;
 import me.aap.utils.app.App;
+import me.aap.utils.io.FileUtils;
 import me.aap.utils.async.FutureSupplier;
-import me.aap.utils.collection.NaturalOrderComparator;
 import me.aap.utils.function.Supplier;
 import me.aap.utils.log.Log;
-import me.aap.utils.net.http.HttpConnection;
-import me.aap.utils.net.http.HttpFileDownloader;
-import me.aap.utils.pref.PreferenceStore;
-import me.aap.utils.pref.PreferenceStore.Pref;
-import me.aap.utils.text.TextUtils;
-import me.aap.utils.ui.UiUtils;
 import me.aap.utils.ui.activity.AppActivity;
 import me.aap.utils.ui.activity.SplitCompatActivityBase;
 
 public class MainActivity extends SplitCompatActivityBase
 		implements FermataActivity, AddonManager.Listener {
+	private static final String GPLAY_PKG = "com.android.vending";
 	private static FermataMediaServiceConnection service;
 	private static MainActivity activeInstance;
 
@@ -161,5 +144,57 @@ public class MainActivity extends SplitCompatActivityBase
 		}
 
 		return super.onGenericMotionEvent(event);
+	}
+
+	/**
+	 * Android Auto lists the full screen apps only if Google Play is recorded as the installer.
+	 * The media service is shown with the "Unknown sources" developer option, the full UI is not.
+	 */
+	public static boolean isInstalledForAndroidAuto(Context ctx) {
+		try {
+			PackageManager pm = ctx.getPackageManager();
+			String installer = (SDK_INT >= Build.VERSION_CODES.R) ?
+					pm.getInstallSourceInfo(ctx.getPackageName()).getInstallingPackageName() :
+					pm.getInstallerPackageName(ctx.getPackageName());
+			return GPLAY_PKG.equals(installer);
+		} catch (Exception ex) {
+			Log.e(ex, "Failed to get the installer package");
+			return false;
+		}
+	}
+
+	/**
+	 * Reinstall the installed APK of this application with Google Play as the installer, so that
+	 * the full UI appears in Android Auto. Nothing is downloaded - the APK already installed on
+	 * the device is passed to the system package installer, which asks the user to confirm.
+	 */
+	public void installForAndroidAuto() {
+		if (!BuildConfig.AUTO) return;
+		var info = getApplicationInfo();
+
+		if ((info.splitSourceDirs != null) && (info.splitSourceDirs.length != 0)) {
+			showAlert(this, R.string.aa_install_split);
+			return;
+		}
+
+		App.get().execute(() -> {
+			File dir = new File(getCacheDir(), "updates");
+			//noinspection ResultOfMethodCallIgnored
+			dir.mkdirs();
+			File apk = new File(dir, "app.apk");
+			FileUtils.copy(new File(info.sourceDir), apk);
+			return apk;
+		}).main().onSuccess(apk -> {
+			Uri u = FileProvider.getUriForFile(this, getPackageName() + ".FileProvider", apk);
+			Intent i = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+			i.setData(u);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			i.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+			i.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, GPLAY_PKG);
+			startActivity(i);
+		}).onFailure(err -> {
+			Log.e(err, "Failed to reinstall the application");
+			showAlert(this, R.string.aa_install_failed, err.getLocalizedMessage());
+		});
 	}
 }
